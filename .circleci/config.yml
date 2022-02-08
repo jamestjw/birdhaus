@@ -1,6 +1,6 @@
-# Java Gradle CircleCI 2.0 configuration file
-# See: https://circleci.com/docs/2.0/language-java/
-version: 2
+orbs:
+  discord: teka23/discord@0.0.1
+version: 2.1
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -26,6 +26,15 @@ jobs:
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
+      # Send notification to Discord about the start of the job
+      - discord/notify:
+          color: '4383476'
+          message: >
+                Pipeline execution starting\n
+                Branch: **${CIRCLE_BRANCH}**\n
+                Job: **${CIRCLE_JOB}**\n
+                User: **${CIRCLE_PR_USERNAME:-${CIRCLE_USERNAME}}**\n
+
       - checkout
 
       # Download and cache dependencies
@@ -45,3 +54,5 @@ jobs:
       # run tests!
       - run: gradle test
 
+      # Send notification to discord about the status of the workflow.
+      - discord/status:
