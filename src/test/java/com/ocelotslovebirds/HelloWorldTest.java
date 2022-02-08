@@ -1,13 +1,13 @@
 package com.ocelotslovebirds;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import com.ocelotslovebirds.HelloWorld;
+
+import org.junit.jupiter.api.Test;
+
 
 public class HelloWorldTest {
-	@Test
-	public void testGetFourOneTwo() {
-		HelloWorld helloWorld = new HelloWorld();
-		assertEquals(412, helloWorld.getFourOneTwo());
-	}
+    @Test
+    public void testGetFourOneTwo() {
+        assertEquals(412, HelloWorld.getFourOneTwo());
+    }
 }
