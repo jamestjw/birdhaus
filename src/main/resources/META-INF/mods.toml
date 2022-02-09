@@ -1,0 +1,23 @@
+
+modLoader="javafml" #mandatory
+
+loaderVersion="[38,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+
+license="MIT"
+
+[[mods]] 
+
+modId="birdhousemod" #mandatory
+
+version="1.0"
+displayName="Birdhouse Mod" #mandatory
+
+logoFile="examplemod.png" #optional
+
+credits="" #optional
+
+authors="Drouba" #optional
+
+description='''
+This mod adds birdhouses to minecraft
+'''
