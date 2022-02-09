@@ -57,11 +57,7 @@ jobs:
       # Send notification to Discord about the start of the job
       - discord/notify:
           color: '4383476'
-          message: >
-                Pipeline execution starting\n
-                Branch: **${CIRCLE_BRANCH}**\n
-                Job: **${CIRCLE_JOB}**\n
-                User: **${CIRCLE_PR_USERNAME:-${CIRCLE_USERNAME}}**\n
+          message: 'Pipeline execution starting\nBranch: **${CIRCLE_BRANCH}**\nJob: **${CIRCLE_JOB}**\nUser: **${CIRCLE_PR_USERNAME:-${CIRCLE_USERNAME}}**\n'
 
       - checkout
 
