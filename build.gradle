@@ -1,0 +1,22 @@
+apply plugin: 'java'
+apply plugin: 'checkstyle'
+
+dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task Checkstyle(type: Checkstyle) {
+    configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+    source 'src/main/java'
+    include '**/*.java'
+
+    // empty classpath
+    classpath = files()
+
+}
+
+repositories { mavenCentral() }
