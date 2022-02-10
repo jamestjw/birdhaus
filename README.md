@@ -1,4 +1,4 @@
-# ocelotslovebirds
+# Birdhaus
 A Minecraft mod that brings you the wonder of birds!
 
 ## How to install?

@@ -1,4 +1,4 @@
-package com.ocelotslovebirds;
+package com.ocelotslovebirds.birdhaus;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

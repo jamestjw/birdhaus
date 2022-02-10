@@ -1,4 +1,4 @@
-package com.ocelotslovebirds;
+package com.ocelotslovebirds.birdhaus;
 
 public class HelloWorld {
     public static int getFourOneTwo() {
