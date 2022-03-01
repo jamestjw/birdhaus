@@ -1,18 +1,17 @@
-package com.ocelotlovesbirds.birdhaus;
+package com.ocelotslovebirds.birdhaus;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.ocelotlovesbirds.birdhaus.setup.ClientSetup;
-import com.ocelotlovesbirds.birdhaus.setup.ModSetup;
-import com.ocelotlovesbirds.birdhaus.setup.Registration;
+import com.ocelotslovebirds.birdhaus.setup.ClientSetup;
+import com.ocelotslovebirds.birdhaus.setup.ModSetup;
+import com.ocelotslovebirds.birdhaus.setup.Registration;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
 
 
 //Mod identity must match the meta-inf file.

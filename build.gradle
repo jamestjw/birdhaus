@@ -19,8 +19,8 @@ apply plugin: 'maven-publish'
 apply plugin: 'java'
 apply plugin: 'checkstyle'
 
-version = '0.1'
-group = 'team.ocelot.birdhaus' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = '1.18-0.1.1'
+group = 'com.ocelotslovebirds.birdhaus' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'birdhaus'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
