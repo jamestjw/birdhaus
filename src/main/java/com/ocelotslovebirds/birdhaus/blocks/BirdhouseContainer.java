@@ -27,7 +27,6 @@ public class BirdhouseContainer extends AbstractContainerMenu {
      * @param playerInventory The interacting players' inventory.
      * @param player          The interacting player.
      */
-    //
     public BirdhouseContainer(int windowId, BlockPos position, Inventory playerInventory, Player player) {
         super(Registration.BIRDHOUSE_CONTAINER.get(), windowId);
         blockEntity = player.getCommandSenderWorld().getBlockEntity(position);

@@ -58,7 +58,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
     }
 
 
-    //TODO: Hook in bird spawning into the Entity ticker.
+    // TODO: Hook in bird spawning into the Entity ticker.
 
     /**
      * This is the main loop for the birdhouse. It needs to be improved to allow for the spawning of birds however at
@@ -80,7 +80,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
             }
         }
 
-        //When adding seeds, if the seeds are "burnable" then set the block to active.
+        // When adding seeds, if the seeds are "burnable" then set the block to active.
         BlockState blockState = getBlockState();
         if (blockState.getValue(BlockStateProperties.CONDITIONAL) != counter > 0) {
             level.setBlock(worldPosition, blockState.setValue(BlockStateProperties.CONDITIONAL, counter > 0),
@@ -91,8 +91,8 @@ public class BirdhouseBlockEntity extends BlockEntity {
     /**
      * @param tag The compoundtag is the blockentity tag that allow for specific load/save instructions.
      */
-    //Important Note: Do -not- override save.
-    //Override "saveAdditional" instead unless you are extremely sure of what you are doing.
+    // Important Note: Do -not- override save.
+    // Override "saveAdditional" instead unless you are extremely sure of what you are doing.
     @Override
     public void saveAdditional(CompoundTag tag) {
         tag.put("Inventory", itemHandler.serializeNBT());
@@ -116,8 +116,8 @@ public class BirdhouseBlockEntity extends BlockEntity {
              * @param stack The item stack being dragged to the item.
              * @return If the item is valid.
              */
-            //TODO: Expand this function to incorporate all things tagged as seeds. Do so by printing tags and
-            // comparing those.
+            // TODO: Expand this function to incorporate all things tagged as seeds. Do so by printing tags and
+            //  comparing those.
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
                 return stack.getItem().getDescriptionId().equals("item.minecraft.wheat_seeds");

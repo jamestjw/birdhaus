@@ -20,7 +20,7 @@ public class BlockStatesGen extends BlockStateProvider {
     /**
      * The basic model registration. Add additional models or test model registration here.
      */
-    //Initial Block data is just a simple block. Will be more complicated later.
+    // Initial Block data is just a simple block. Will be more complicated later.
     @Override
     protected void registerStatesAndModels() {
         registerBirdhouseStub();

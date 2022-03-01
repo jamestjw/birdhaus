@@ -18,7 +18,6 @@ public class ItemModelsGen extends ItemModelProvider {
     public ItemModelsGen(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator, Core.MODID, existingFileHelper);
     }
-
     /**
      * Registers the models for the birdhouseBlock
      */

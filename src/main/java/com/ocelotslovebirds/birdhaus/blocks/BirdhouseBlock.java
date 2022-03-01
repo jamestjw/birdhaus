@@ -44,7 +44,7 @@ public class BirdhouseBlock extends Block implements EntityBlock {
         super(Properties.of(Material.WOOD).sound(SoundType.WOOD));
     }
 
-    //Depreciation suppressed until I can figure out how to accomplish this in 1.18.
+    // Depreciation suppressed until I can figure out how to accomplish this in 1.18.
     @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter reader, BlockPos pos) {
@@ -108,7 +108,7 @@ public class BirdhouseBlock extends Block implements EntityBlock {
      * @param trace  The data on the hit for the block. Unused so far.
      * @return The data of the interaction with the block. See InteractionResult for more details.
      */
-    //Depreciation suppressed until I can figure out how to get this same functionality in 1.18.
+    // Depreciation suppressed until I can figure out how to get this same functionality in 1.18.
     @SuppressWarnings("depreciation")
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
