@@ -28,34 +28,62 @@ public class BlockStatesGen extends BlockStateProvider {
 
 
     /**
-     * Creates a frame stub model and registers it as belonging to the birdhouse, then creates a complex interior.
+     * Registers the BirdhouseStub as belonging to the birdhouse.
      */
     private void registerBirdhouseStub() {
+    	
+    	createFrameBirdhouseStub("wood_light", "block/stripped_oak_log", "wood_dark", "block/stripped_dark_oak_log");
+
+    }
+    
+    /**
+     * Creates a frame stub model, then creates a complex interior.
+     * 
+     * @param lightTextureName Texture to be used for the lighter areas of the birdhouse
+     * @param lightTexturePath Address where the light texture file is saved
+     * @param darkTextureName Texture to be used for the darker areas of the birdhouse
+     * @param darkTexturePath Address where the dark texture file is saved
+     */
+    
+    private void createFrameBirdhouseStub(String lightTextureName, String lightTexturePath, String darkTextureName, String darkTexturePath) {
+    	
         BlockModelBuilder frame = models().getBuilder("block/birdhouse/main");
         frame.parent(models().getExistingFile(mcLoc("cube")));
+        frame.texture(lightTextureName, modLoc(lightTexturePath));
+        frame.texture(darkTextureName, modLoc(darkTexturePath));
+        
+        floatingCube(frame, 3f, 0f, 2f, 13f, 3f, 12f, "#"+darkTextureName); //base
+        floatingCube(frame, 4f, 3f, 2f, 5f, 4f, 3f, "#"+darkTextureName); //front perch leg 1
+        floatingCube(frame, 11f, 3f, 2f, 12f, 4f, 3f, "#"+darkTextureName); //front perch leg 2
+        floatingCube(frame, 3f, 4f, 2f, 13f, 5f, 3f, "#"+darkTextureName); //front perch
+        floatingCube(frame, 3f, 3f, 4f, 13f, 6f, 12f, "#"+lightTextureName); //house base
+        floatingCube(frame, 3f, 6f, 4f, 6f, 10f, 12f, "#"+lightTextureName); //house wall 1
+        floatingCube(frame, 10f, 6f, 4f, 13f, 10f, 12f, "#"+lightTextureName); //house wall 2
+        floatingCube(frame, 3f, 10f, 4f, 13f, 11f, 12f, "#"+lightTextureName); //house top
+        floatingCube(frame, 6f, 6f, 11f, 10f, 10f, 12f, "#"+lightTextureName); //house back wall
+        floatingCube(frame, 0f, 5f, 7f, 3f, 6f, 8f, "#"+darkTextureName); //side perch 1
+        floatingCube(frame, 13f, 5f, 7f, 16f, 6f, 8f, "#"+darkTextureName); //side perch 2
+        floatingCube(frame, 4f, 11f, 4f, 12f, 12f, 12f, "#"+lightTextureName); //roof 1
+        floatingCube(frame, 5f, 12f, 4f, 11f, 13f, 12f, "#"+lightTextureName); //roof 2
+        floatingCube(frame, 6f, 13f, 4f, 10f, 14f, 12f, "#"+lightTextureName); //roof 3
+        floatingCube(frame, 7f, 14f, 4f, 9f, 15f, 12f, "#"+lightTextureName); //roof 4
+        floatingCube(frame, 6f, 15f, 4f, 10f, 16f, 12f, "#"+darkTextureName); //roof shingles 1
+        floatingCube(frame, 5f, 14f, 4f, 7f, 15f, 12f, "#"+darkTextureName); //roof shingles 2
+        floatingCube(frame, 4f, 13f, 4f, 6f, 14f, 12f, "#"+darkTextureName); //roof shingles 3
+        floatingCube(frame, 3f, 12f, 4f, 5f, 13f, 12f, "#"+darkTextureName); //roof shingles 4
+        floatingCube(frame, 2f, 11f, 4f, 4f, 12f, 12f, "#"+darkTextureName); //roof shingles 5
+        floatingCube(frame, 1f, 10f, 4f, 3f, 11f, 12f, "#"+darkTextureName); //roof shingles 6        
+        floatingCube(frame, 9f, 14f, 4f, 11f, 15f, 12f, "#"+darkTextureName); //roof shingles 7
+        floatingCube(frame, 10f, 13f, 4f, 12f, 14f, 12f, "#"+darkTextureName); //roof shingles 8
+        floatingCube(frame, 11f, 12f, 4f, 13f, 13f, 12f, "#"+darkTextureName); //roof shingles 9
+        floatingCube(frame, 12f, 11f, 4f, 14f, 12f, 12f, "#"+darkTextureName); //roof shingles 10
+        floatingCube(frame, 13f, 10f, 4f, 15f, 11f, 12f, "#"+darkTextureName); //roof shingles 11
 
-        floatingCube(frame, 0f, 0f, 0f, 1f, 16f, 1f);
-        floatingCube(frame, 15f, 0f, 0f, 16f, 16f, 1f);
-        floatingCube(frame, 0f, 0f, 15f, 1f, 16f, 16f);
-        floatingCube(frame, 15f, 0f, 15f, 16f, 16f, 16f);
+        //frame.texture("particle", modLoc("block/birdhouse"));
 
-        floatingCube(frame, 1f, 0f, 0f, 15f, 1f, 1f);
-        floatingCube(frame, 1f, 15f, 0f, 15f, 16f, 1f);
-        floatingCube(frame, 1f, 0f, 15f, 15f, 1f, 16f);
-        floatingCube(frame, 1f, 15f, 15f, 15f, 16f, 16f);
-
-        floatingCube(frame, 0f, 0f, 1f, 1f, 1f, 15f);
-        floatingCube(frame, 15f, 0f, 1f, 16f, 1f, 15f);
-        floatingCube(frame, 0f, 15f, 1f, 1f, 16f, 15f);
-        floatingCube(frame, 15f, 15f, 1f, 16f, 16f, 15f);
-
-        floatingCube(frame, 1f, 1f, 1f, 15f, 15f, 15f);
-
-        frame.texture("window", modLoc("block/birdhouse_window"));
-        frame.texture("particle", modLoc("block/birdhouse"));
-
-        createBirdhouseStubModel(Registration.BIRDHOUSE_BLOCK.get(), frame);
+        createComplexBirdhouseStubModel(Registration.BIRDHOUSE_BLOCK.get(), frame);
     }
+
 
     /**
      * Creates a complex stub model that is capabable of changing appearance based on two states and animates the
@@ -66,13 +94,13 @@ public class BlockStatesGen extends BlockStateProvider {
      * @param block The block being created
      * @param frame The frame that the stub is created in.
      */
-    private void createBirdhouseStubModel(BirdhouseBlock block, BlockModelBuilder frame) {
+    private void createComplexBirdhouseStubModel(BirdhouseBlock block, BlockModelBuilder frame) {
 
         BlockModelBuilder singleOff = models().getBuilder("block/birdhouse/singleoff")
-                .element().from(3, 3, 3).to(13, 13, 13).face(Direction.DOWN).texture("#single").end()
+                .element().from(5, 5, 5).to(11, 11, 11).face(Direction.DOWN).texture("#single").end()
                 .end().texture("single", modLoc("block/birdhouse_off"));
         BlockModelBuilder singleOn = models().getBuilder("block/birdhouse/singleon")
-                .element().from(3, 3, 3).to(13, 13, 13).face(Direction.DOWN).texture("#single").end()
+                .element().from(5, 5, 5).to(11, 11, 11).face(Direction.DOWN).texture("#single").end()
                 .end().texture("single", modLoc("block/birdhouse_on"));
 
         MultiPartBlockStateBuilder bld = getMultipartBuilder(block);
@@ -106,12 +134,13 @@ public class BlockStatesGen extends BlockStateProvider {
      * @param tx      top x
      * @param ty      top y
      * @param tz      top z
+     * @param texture value to pass on as texture
      */
-    private void floatingCube(BlockModelBuilder builder, float fx, float fy, float fz, float tx, float ty, float tz) {
+    private void floatingCube(BlockModelBuilder builder, float fx, float fy, float fz, float tx, float ty, float tz, String texture) {
         builder.element()
                 .from(fx, fy, fz)
                 .to(tx, ty, tz)
-                .allFaces((direction, faceBuilder) -> faceBuilder.texture("#window"))
+                .allFaces((direction, faceBuilder) -> faceBuilder.texture(texture))
                 .end();
     }
 
