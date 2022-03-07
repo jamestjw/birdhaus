@@ -7,10 +7,16 @@ We make use `gradle` (a build-automation tool). Installation steps may be found 
 ## How to run?
 Run checks
 ```bash
-gradle check
+./gradlew check
 ```
 
 Run tests
 ```bash
-gradle test
+./gradlew test
+```
+
+Run mod
+```bash
+./gradlew runData # Generate data files
+./gradlew runClient # Run Minecraft client
 ```
