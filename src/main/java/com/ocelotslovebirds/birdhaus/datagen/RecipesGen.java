@@ -13,7 +13,6 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Blocks;
 
 /**
  * The RecipesGenerator allows for the dynamic inclusion of recipes so hand-tailoring the .json is no longer necessary.
