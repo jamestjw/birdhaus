@@ -10,8 +10,9 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Blocks;
 
 /**
  * The RecipesGenerator allows for the dynamic inclusion of recipes so hand-tailoring the .json is no longer necessary.
@@ -30,10 +31,12 @@ public class RecipesGen extends RecipeProvider {
      * @param planks         Ingredient for the birdhouse.
      */
     private static void birdhouseRecipe(
-            Consumer<FinishedRecipe> recipeConsumer, ItemLike birdhouse, ItemLike log, ItemLike planks) {
+            Consumer<FinishedRecipe> recipeConsumer, ItemLike birdhouse, Tag log, Tag planks) {
         //Note: To add more ingredients, overload this method with more ItemLikes, provide the item in the function call
         //and provide a pattern and define below. Unlocked by controls what unlocks the recipe for a player in survival
         // mode.
+
+        // Added tag item type - to enable spawing birdhouse using any type of plank OR logs
         ShapedRecipeBuilder.shaped(birdhouse)
                 .pattern("LLL")
                 .pattern(" P ")
@@ -48,6 +51,6 @@ public class RecipesGen extends RecipeProvider {
 
     @Override
     protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
-        birdhouseRecipe(consumer, Registration.BIRDHOUSE_BLOCK.get(), Blocks.SPRUCE_LOG, Blocks.SPRUCE_PLANKS);
+        birdhouseRecipe(consumer, Registration.BIRDHOUSE_BLOCK.get(), BlockTags.LOGS, BlockTags.PLANKS);
     }
 }
