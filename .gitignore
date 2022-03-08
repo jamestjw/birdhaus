@@ -13,7 +13,7 @@ run
 .classpath
 .project
 .settings/
-/bin/
+bin/
 
 src/generated/
 
