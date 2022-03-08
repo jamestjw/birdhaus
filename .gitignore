@@ -13,3 +13,10 @@ run
 .classpath
 .project
 .settings/
+/bin/
+
+src/generated/
+
+runClient.launch
+runData.launch
+runServer.launch
