@@ -1,10 +1,15 @@
 package com.ocelotslovebirds.birdhaus.blocks;
 
 import com.ocelotslovebirds.birdhaus.setup.Registration;
+import com.ocelotslovebirds.birdhaus.ticker.FixedIntervalTicker;
+import com.ocelotslovebirds.birdhaus.ticker.Ticker;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -26,6 +31,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
     private final ItemStackHandler itemHandler = createHandler();
     private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
 
+    private Ticker tickerForBirdSpawns = new FixedIntervalTicker(50);
     private int counter;
 
     /**
@@ -59,8 +65,6 @@ public class BirdhouseBlockEntity extends BlockEntity {
     }
 
 
-    // TODO: Hook in bird spawning into the Entity ticker.
-
     /**
      * This is the main loop for the birdhouse. It needs to be improved to allow for the spawning of birds however at
      * the moment it works well for
@@ -70,6 +74,24 @@ public class BirdhouseBlockEntity extends BlockEntity {
      */
 
     public void tickServer() {
+        handleSeedsForTick();
+        handleBirdSpawnForTick();
+    }
+
+    private void handleBirdSpawnForTick() {
+        if (tickerForBirdSpawns.tick()) {
+            // Dirty type casting because it works
+            ServerLevel lvl = (ServerLevel) this.getLevel();
+            Parrot newBird = new Parrot(EntityType.PARROT, lvl);
+            lvl.addFreshEntity(newBird);
+
+            // Move the spawned bird to the birdhouse
+            // 0.0 because it works, not sure what this supposed to be
+            newBird.moveTo(this.getBlockPos(), (float) 0.0, (float) 0.0);
+        }
+    }
+
+    private void handleSeedsForTick() {
         if (counter > 0) {
             counter--;
             setChanged();
