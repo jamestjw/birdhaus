@@ -34,7 +34,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
     private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
 
     private Ticker tickerForBirdSpawns = new FixedIntervalTicker(150);
-    private int counter;
+    private Ticker tickerForSeedConsumption = new FixedIntervalTicker(100);
 
     /**
      * @param pos   Position of the block.
@@ -110,21 +110,15 @@ public class BirdhouseBlockEntity extends BlockEntity {
     }
 
     private void handleSeedsForTick() {
-        if (counter > 0) {
-            counter--;
-            setChanged();
-        }
-        if (counter <= 0) {
-            if (!itemHandler.extractItem(0, 1, false).isEmpty()) {
-                counter = 100;
-                setChanged();
-            }
+        Boolean seedExtracted = false;
+        if (tickerForSeedConsumption.tick()) {
+            seedExtracted = !itemHandler.extractItem(0, 1, false).isEmpty();
         }
 
         // When adding seeds, if the seeds are "burnable" then set the block to active.
         BlockState blockState = getBlockState();
-        if (blockState.getValue(BlockStateProperties.CONDITIONAL) != counter > 0) {
-            level.setBlock(worldPosition, blockState.setValue(BlockStateProperties.CONDITIONAL, counter > 0),
+        if (blockState.getValue(BlockStateProperties.CONDITIONAL) != seedExtracted) {
+            level.setBlock(worldPosition, blockState.setValue(BlockStateProperties.CONDITIONAL, seedExtracted),
                     Block.UPDATE_ALL);
         }
     }
