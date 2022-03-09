@@ -1,5 +1,7 @@
 package com.ocelotslovebirds.birdhaus.blocks;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import com.ocelotslovebirds.birdhaus.setup.Registration;
 import com.ocelotslovebirds.birdhaus.ticker.FixedIntervalTicker;
 import com.ocelotslovebirds.birdhaus.ticker.Ticker;
@@ -31,7 +33,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
     private final ItemStackHandler itemHandler = createHandler();
     private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
 
-    private Ticker tickerForBirdSpawns = new FixedIntervalTicker(50);
+    private Ticker tickerForBirdSpawns = new FixedIntervalTicker(150);
     private int counter;
 
     /**
@@ -78,16 +80,32 @@ public class BirdhouseBlockEntity extends BlockEntity {
         handleBirdSpawnForTick();
     }
 
+    /*
+     * @param xOffset  x offset (East-West axis) at which to spawn the bird
+     * @param yOffset  y offset (Up-Down axis) at which to spawn the bird
+     * @param yOffset  z offset (North-South axis) at which to spawn the bird
+     * All offsets are relative to the birdhouse
+     * TODO: Check if yOffset actually works, it is possible that
+     * birds can only be spawned on the ground.
+    */
+    private void spawnNewBird(int xOffset, int yOffset, int zOffset) {
+        // Dirty type casting because it works
+        ServerLevel lvl = (ServerLevel) this.getLevel();
+        Parrot newBird = new Parrot(EntityType.PARROT, lvl);
+        lvl.addFreshEntity(newBird);
+        BlockPos desBlockPos = this.getBlockPos().offset(xOffset, yOffset, zOffset);
+
+        // Move the spawned bird to the destination
+        // 0.0 because it works, not sure what this supposed to be
+        newBird.moveTo(desBlockPos, (float) 0.0, (float) 0.0);
+    }
+
     private void handleBirdSpawnForTick() {
         if (tickerForBirdSpawns.tick()) {
-            // Dirty type casting because it works
-            ServerLevel lvl = (ServerLevel) this.getLevel();
-            Parrot newBird = new Parrot(EntityType.PARROT, lvl);
-            lvl.addFreshEntity(newBird);
-
-            // Move the spawned bird to the birdhouse
-            // 0.0 because it works, not sure what this supposed to be
-            newBird.moveTo(this.getBlockPos(), (float) 0.0, (float) 0.0);
+            int xOffset = ThreadLocalRandom.current().nextInt(-20, 20);
+            int yOffset = 50;
+            int zOffset = ThreadLocalRandom.current().nextInt(-20, 20);
+            spawnNewBird(xOffset, yOffset, zOffset);
         }
     }
 
