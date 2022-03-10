@@ -46,7 +46,7 @@ public class BlockStatesGen extends BlockStateProvider {
      */
 
     private void createFrameBirdhouseStub(String lightTextureName, String lightTexturePath, String darkTextureName,
-    		String darkTexturePath) {
+             String darkTexturePath) {
         BlockModelBuilder frame = models().getBuilder("block/birdhouse/main");
         frame.parent(models().getExistingFile(mcLoc("cube")));
         frame.texture(lightTextureName, modLoc(lightTexturePath));
@@ -136,7 +136,7 @@ public class BlockStatesGen extends BlockStateProvider {
      * @param texture value to pass on as texture
      */
     private void floatingCube(BlockModelBuilder builder, float fx, float fy, float fz, float tx, float ty, float tz,
-    		String texture) {
+            String texture) {
         builder.element()
                 .from(fx, fy, fz)
                 .to(tx, ty, tz)
