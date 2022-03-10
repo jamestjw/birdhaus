@@ -36,6 +36,9 @@ public class BirdhouseBlockEntity extends BlockEntity {
     private Ticker tickerForBirdSpawns = new FixedIntervalTicker(150);
     private Ticker tickerForSeedConsumption = new FixedIntervalTicker(100);
 
+    // The block is active if it able to consume seeds
+    private Boolean isActive = false;
+
     /**
      * @param pos   Position of the block.
      * @param state State of the block being created.
@@ -110,16 +113,27 @@ public class BirdhouseBlockEntity extends BlockEntity {
     }
 
     private void handleSeedsForTick() {
-        Boolean seedExtracted = false;
-        if (tickerForSeedConsumption.tick()) {
-            seedExtracted = !itemHandler.extractItem(0, 1, false).isEmpty();
+        if (isActive) {
+            // If the birdhouse is active, try consuming a seed
+            if (!itemHandler.extractItem(0, 1, false).isEmpty()) {
+                // If a seed was successfully consumed, set birdhouse to inactive
+                isActive = false;
+            }
+        } else {
+            // If birdhouse is inactive, start ticking to eventually reactivate it
+            if (tickerForSeedConsumption.tick()) {
+                isActive = true;
+            }
         }
 
-        // When adding seeds, if the seeds are "burnable" then set the block to active.
+        // Update the block state if there was a change
         BlockState blockState = getBlockState();
-        if (blockState.getValue(BlockStateProperties.CONDITIONAL) != seedExtracted) {
-            level.setBlock(worldPosition, blockState.setValue(BlockStateProperties.CONDITIONAL, seedExtracted),
-                    Block.UPDATE_ALL);
+        if (blockState.getValue(BlockStateProperties.CONDITIONAL) != isActive) {
+            level.setBlock(
+                worldPosition,
+                blockState.setValue(BlockStateProperties.CONDITIONAL, isActive),
+                Block.UPDATE_ALL
+            );
         }
     }
 
