@@ -13,3 +13,8 @@ run
 .classpath
 .project
 .settings/
+bin/
+
+runClient.launch
+runData.launch
+runServer.launch
