@@ -32,7 +32,7 @@ public class BlockStatesGen extends BlockStateProvider {
      */
     private void registerBirdhouseStub() {
 
-    	createFrameBirdhouseStub("wood_light", "block/stripped_oak_log", "wood_dark", "block/stripped_dark_oak_log");
+        createFrameBirdhouseStub("wood_light", "block/stripped_oak_log", "wood_dark", "block/stripped_dark_oak_log");
 
     }
 
@@ -45,7 +45,7 @@ public class BlockStatesGen extends BlockStateProvider {
      * @param darkTexturePath Address where the dark texture file is saved
      */
 
-    private void createFrameBirdhouseStub(String lightTextureName, String lightTexturePath, String darkTextureName, 
+    private void createFrameBirdhouseStub(String lightTextureName, String lightTexturePath, String darkTextureName,
     		String darkTexturePath) {
         BlockModelBuilder frame = models().getBuilder("block/birdhouse/main");
         frame.parent(models().getExistingFile(mcLoc("cube")));
@@ -72,7 +72,7 @@ public class BlockStatesGen extends BlockStateProvider {
         floatingCube(frame, 4f, 13f, 4f, 6f, 14f, 12f, "#" + darkTextureName); //roof shingles 3
         floatingCube(frame, 3f, 12f, 4f, 5f, 13f, 12f, "#" + darkTextureName); //roof shingles 4
         floatingCube(frame, 2f, 11f, 4f, 4f, 12f, 12f, "#" + darkTextureName); //roof shingles 5
-        floatingCube(frame, 1f, 10f, 4f, 3f, 11f, 12f, "#" + darkTextureName); //roof shingles 6        
+        floatingCube(frame, 1f, 10f, 4f, 3f, 11f, 12f, "#" + darkTextureName); //roof shingles 6
         floatingCube(frame, 9f, 14f, 4f, 11f, 15f, 12f, "#" + darkTextureName); //roof shingles 7
         floatingCube(frame, 10f, 13f, 4f, 12f, 14f, 12f, "#" + darkTextureName); //roof shingles 8
         floatingCube(frame, 11f, 12f, 4f, 13f, 13f, 12f, "#" + darkTextureName); //roof shingles 9
@@ -135,7 +135,7 @@ public class BlockStatesGen extends BlockStateProvider {
      * @param tz      top z
      * @param texture value to pass on as texture
      */
-    private void floatingCube(BlockModelBuilder builder, float fx, float fy, float fz, float tx, float ty, float tz, 
+    private void floatingCube(BlockModelBuilder builder, float fx, float fy, float fz, float tx, float ty, float tz,
     		String texture) {
         builder.element()
                 .from(fx, fy, fz)
