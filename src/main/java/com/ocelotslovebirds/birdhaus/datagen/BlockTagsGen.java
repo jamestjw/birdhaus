@@ -4,8 +4,6 @@ import com.ocelotslovebirds.birdhaus.Core;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class BlockTagsGen extends BlockTagsProvider {

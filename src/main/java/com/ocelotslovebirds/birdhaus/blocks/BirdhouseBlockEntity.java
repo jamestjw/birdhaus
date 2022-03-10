@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -116,11 +117,9 @@ public class BirdhouseBlockEntity extends BlockEntity {
              * @param stack The item stack being dragged to the item.
              * @return If the item is valid.
              */
-            // TODO: Expand this function to incorporate all things tagged as seeds. Do so by printing tags and
-            //  comparing those.
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
-                return stack.getItem().getDescriptionId().equals("item.minecraft.wheat_seeds");
+                return stack.getItem().getTags().contains(Tags.Items.SEEDS.getName());
             }
 
             /**
