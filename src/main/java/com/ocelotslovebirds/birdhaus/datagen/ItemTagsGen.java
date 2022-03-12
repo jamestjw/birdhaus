@@ -29,6 +29,6 @@ public class ItemTagsGen extends ItemTagsProvider {
      */
     @Override
     public String getName() {
-        return "birdhaustags";
+        return "Birdhaus Item Tags";
     }
 }
