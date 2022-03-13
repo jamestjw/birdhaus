@@ -18,3 +18,5 @@ bin/
 runClient.launch
 runData.launch
 runServer.launch
+
+src/generated
