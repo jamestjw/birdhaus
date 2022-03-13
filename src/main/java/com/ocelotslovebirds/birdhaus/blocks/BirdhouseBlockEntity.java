@@ -9,6 +9,7 @@ import com.ocelotslovebirds.birdhaus.ticker.FixedIntervalTicker;
 import com.ocelotslovebirds.birdhaus.ticker.Ticker;
 import com.ocelotslovebirds.birdhaus.setup.Registration;
 import com.ocelotslovebirds.birdhaus.mobai.HangAroundBirdhouseGoal;
+import com.ocelotslovebirds.birdhaus.setup.Registration;
 
 
 import net.minecraft.core.BlockPos;
@@ -24,14 +25,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.common.Tags;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraft.world.level.EntityGetter;
 
 /**
  * The birdhouse block entity describes the behavior of the birdhouse block and serves as an easy way to separate
@@ -48,10 +48,14 @@ public class BirdhouseBlockEntity extends BlockEntity {
 
     // The block is active if it able to consume seeds
     private Boolean isActive = false;
+    private AABB birdHouseBB =
+        new AABB(this.getBlockPos().getX() - 10,
+        this.getBlockPos().getY(),
+        this.getBlockPos().getZ() - 10,
+        this.getBlockPos().getX() + 10,
+        this.getBlockPos().getY() + 10,
+        this.getBlockPos().getX() + 10);
 
-    // The bounding box
-    private AABB birdHouseBB = new AABB(this.getBlockPos().getX()-10, this.getBlockPos().getY(),
-        this.getBlockPos().getZ()-10, this.getBlockPos().getX()+10, this.getBlockPos().getY()+10, this.getBlockPos().getX()+10);
 
 
     /**
@@ -158,6 +162,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
                 for(WrappedGoal g : temp.goalSelector.getAvailableGoals()) {
                     if(g.getGoal() instanceof HangAroundBirdhouseGoal) {
                         toRemove = g.getGoal();
+
                     }
                 }
                 if(toRemove != null) {
