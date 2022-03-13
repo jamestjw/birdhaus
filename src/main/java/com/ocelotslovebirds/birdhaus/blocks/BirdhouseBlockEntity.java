@@ -1,16 +1,23 @@
 package com.ocelotslovebirds.birdhaus.blocks;
 
+
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.List;
 
 import com.ocelotslovebirds.birdhaus.setup.Registration;
 import com.ocelotslovebirds.birdhaus.ticker.FixedIntervalTicker;
 import com.ocelotslovebirds.birdhaus.ticker.Ticker;
+import com.ocelotslovebirds.birdhaus.setup.Registration;
+import com.ocelotslovebirds.birdhaus.mobai.HangAroundBirdhouseGoal;
+
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -18,11 +25,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.Tags;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraft.world.level.EntityGetter;
 
 /**
  * The birdhouse block entity describes the behavior of the birdhouse block and serves as an easy way to separate
@@ -35,9 +44,15 @@ public class BirdhouseBlockEntity extends BlockEntity {
 
     private Ticker tickerForBirdSpawns = new FixedIntervalTicker(150);
     private Ticker tickerForSeedConsumption = new FixedIntervalTicker(100);
+    private Ticker tickerForBirdhouseGoalModification = new FixedIntervalTicker(100);
 
     // The block is active if it able to consume seeds
     private Boolean isActive = false;
+
+    // The bounding box
+    private AABB birdHouseBB = new AABB(this.getBlockPos().getX()-10, this.getBlockPos().getY(),
+        this.getBlockPos().getZ()-10, this.getBlockPos().getX()+10, this.getBlockPos().getY()+10, this.getBlockPos().getX()+10);
+
 
     /**
      * @param pos   Position of the block.
@@ -69,7 +84,6 @@ public class BirdhouseBlockEntity extends BlockEntity {
         super.load(tag);
     }
 
-
     /**
      * This is the main loop for the birdhouse. It needs to be improved to allow for the spawning of birds however at
      * the moment it works well for
@@ -81,6 +95,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
     public void tickServer() {
         handleSeedsForTick();
         handleBirdSpawnForTick();
+        handleParrotGoalForTick();
     }
 
     /*
@@ -110,29 +125,68 @@ public class BirdhouseBlockEntity extends BlockEntity {
             // Random z offset
             int zOffset = ThreadLocalRandom.current().nextInt(-20, 20);
             spawnNewBird(xOffset, yOffset, zOffset);
+
+        }
+    }
+
+    private void handleParrotGoalForTick() {
+        if (tickerForBirdhouseGoalModification.tick()) {
+            if(this.isActive) {
+                applyBirdHouseGoalToSurroundingParrots();
+            } else {
+                removeBirdHouseGoalToSurroundingParrots();
+            }
+        }
+    }
+
+    private void applyBirdHouseGoalToSurroundingParrots() {
+        List<Parrot> parrots = this.level.getEntitiesOfClass(Parrot.class, this.birdHouseBB);
+        for(Parrot temp:parrots) {
+            // Check to see if they already have the goal applied. If not, apply it.
+            if(!temp.goalSelector.getAvailableGoals().stream().anyMatch(wg -> wg.getGoal() instanceof HangAroundBirdhouseGoal)) {
+                temp.goalSelector.addGoal(0, new HangAroundBirdhouseGoal(temp, 1.0, 60, false, this.getBlockPos()));
+            }
+        }
+    }
+
+    private void removeBirdHouseGoalToSurroundingParrots() {
+        List<Parrot> parrots = this.level.getEntitiesOfClass(Parrot.class, this.birdHouseBB);
+        for(Parrot temp:parrots) {
+            // Check to see if they already have the goal applied. If not, apply it.
+            if(temp.goalSelector.getAvailableGoals().stream().anyMatch(wg -> wg.getGoal() instanceof HangAroundBirdhouseGoal)) {
+                Goal toRemove = null;
+                for(WrappedGoal g : temp.goalSelector.getAvailableGoals()) {
+                    if(g.getGoal() instanceof HangAroundBirdhouseGoal) {
+                        toRemove = g.getGoal();
+                    }
+                }
+                if(toRemove != null) {
+                    temp.goalSelector.removeGoal(toRemove);
+                }
+            }
         }
     }
 
     private void handleSeedsForTick() {
-        if (isActive) {
+        if (this.isActive) {
             // If the birdhouse is active, try consuming a seed
             if (!itemHandler.extractItem(0, 1, false).isEmpty()) {
                 // If a seed was successfully consumed, set birdhouse to inactive
-                isActive = false;
+                this.isActive = false;
             }
         } else {
             // If birdhouse is inactive, start ticking to eventually reactivate it
             if (tickerForSeedConsumption.tick()) {
-                isActive = true;
+                this.isActive = true;
             }
         }
 
         // Update the block state if there was a change
         BlockState blockState = getBlockState();
-        if (blockState.getValue(BlockStateProperties.CONDITIONAL) != isActive) {
+        if (blockState.getValue(BlockStateProperties.CONDITIONAL) != this.isActive) {
             level.setBlock(
                 worldPosition,
-                blockState.setValue(BlockStateProperties.CONDITIONAL, isActive),
+                blockState.setValue(BlockStateProperties.CONDITIONAL, this.isActive),
                 Block.UPDATE_ALL
             );
         }
