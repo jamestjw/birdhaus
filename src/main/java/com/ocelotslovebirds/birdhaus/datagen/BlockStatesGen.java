@@ -97,10 +97,10 @@ public class BlockStatesGen extends BlockStateProvider {
 
         BlockModelBuilder singleOff = models().getBuilder("block/birdhouse/singleoff")
                 .element().from(5, 5, 5).to(11, 11, 11).face(Direction.DOWN).texture("#single").end()
-                .end().texture("single", modLoc("block/birdhouse_off"));
+                .end().texture("single", modLoc("block/birdhouse_off_dark"));
         BlockModelBuilder singleOn = models().getBuilder("block/birdhouse/singleon")
                 .element().from(5, 5, 5).to(11, 11, 11).face(Direction.DOWN).texture("#single").end()
-                .end().texture("single", modLoc("block/birdhouse_on"));
+                .end().texture("single", modLoc("block/birdhouse_on_light"));
 
         MultiPartBlockStateBuilder bld = getMultipartBuilder(block);
         bld.part().modelFile(frame).addModel();
