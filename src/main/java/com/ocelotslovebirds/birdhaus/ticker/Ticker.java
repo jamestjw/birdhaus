@@ -1,6 +1,5 @@
 package com.ocelotslovebirds.birdhaus.ticker;
 
-// TODO: Should the class have a different name?
 // A ticker class helps keep track of when events should happen
 public interface Ticker {
     /*

@@ -88,8 +88,6 @@ public class BirdhouseBlockEntity extends BlockEntity {
      * @param yOffset  y offset (Up-Down axis) at which to spawn the bird
      * @param yOffset  z offset (North-South axis) at which to spawn the bird
      * All offsets are relative to the birdhouse
-     * TODO: Check if yOffset actually works, it is possible that
-     * birds can only be spawned on the ground.
     */
     private void spawnNewBird(int xOffset, int yOffset, int zOffset) {
         // Dirty type casting because it works
@@ -105,8 +103,11 @@ public class BirdhouseBlockEntity extends BlockEntity {
 
     private void handleBirdSpawnForTick() {
         if (tickerForBirdSpawns.tick()) {
+            // Random x offset
             int xOffset = ThreadLocalRandom.current().nextInt(-20, 20);
-            int yOffset = 50;
+            // Spawn bird 10 units higher than the birdhouse
+            int yOffset = this.getBlockPos().getY() + 10;
+            // Random z offset
             int zOffset = ThreadLocalRandom.current().nextInt(-20, 20);
             spawnNewBird(xOffset, yOffset, zOffset);
         }
