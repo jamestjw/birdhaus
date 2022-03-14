@@ -54,7 +54,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
         this.getBlockPos().getZ() - 10,
         this.getBlockPos().getX() + 10,
         this.getBlockPos().getY() + 10,
-        this.getBlockPos().getX() + 10);
+        this.getBlockPos().getZ() + 10);
 
 
 
@@ -87,6 +87,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
         }
         super.load(tag);
     }
+
 
     /**
      * This is the main loop for the birdhouse. It needs to be improved to allow for the spawning of birds however at
@@ -162,7 +163,6 @@ public class BirdhouseBlockEntity extends BlockEntity {
                 for(WrappedGoal g : temp.goalSelector.getAvailableGoals()) {
                     if(g.getGoal() instanceof HangAroundBirdhouseGoal) {
                         toRemove = g.getGoal();
-
                     }
                 }
                 if(toRemove != null) {

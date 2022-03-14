@@ -3,7 +3,6 @@ package com.ocelotslovebirds.birdhaus.mobai;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.phys.Vec3;
 
 
@@ -30,32 +29,6 @@ public class HangAroundBirdhouseGoal extends RandomStrollGoal {
         this.bHousePosVec = new Vec3(this.bHousePos.getX(), this.bHousePos.getY(), this.bHousePos.getZ());
     }
 
-    @Override
-    public boolean canUse() {
-        if (this.mob.isVehicle()) {
-            return false;
-        } else {
-            if (!this.forceTrigger) {
-                if (this.checkNoActionTime && this.mob.getNoActionTime() >= 100) {
-                    return false;
-                }
-                if (this.mob.getRandom().nextInt(reducedTickDelay(this.interval)) != 0) {
-                    return false;
-                }
-            }
-            Vec3 vec3 = this.getPosition();
-            if (vec3 == null) {
-                return false;
-            } else {
-                this.wantedX = vec3.x;
-                this.wantedY = vec3.y;
-                this.wantedZ = vec3.z;
-                this.forceTrigger = false;
-                return true;
-            }
-        }
-    }
-
     /**
      * Returns the position for the parrot to move to. This will be the position of the birdhouse that gave it the goal.
      * If for some reason, the bird is left with this goal with no birdhouse in sight, it will default to behaving like
@@ -66,7 +39,7 @@ public class HangAroundBirdhouseGoal extends RandomStrollGoal {
         if (this.bHousePos != null) {
             return this.bHousePosVec;
         } else {
-            return DefaultRandomPos.getPos(this.mob, 7, 4);
+            return super.getPosition();
         }
     }
 }
