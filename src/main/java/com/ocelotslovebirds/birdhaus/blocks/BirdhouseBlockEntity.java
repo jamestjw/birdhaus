@@ -3,9 +3,9 @@ package com.ocelotslovebirds.birdhaus.blocks;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.ocelotslovebirds.birdhaus.mobai.HangAroundBirdhouseGoal;
 import com.ocelotslovebirds.birdhaus.setup.Registration;
 import com.ocelotslovebirds.birdhaus.ticker.FixedIntervalTicker;
-import com.ocelotslovebirds.birdhaus.mobai.HangAroundBirdhouseGoal;
 import com.ocelotslovebirds.birdhaus.ticker.Ticker;
 
 import net.minecraft.core.BlockPos;
@@ -44,14 +44,14 @@ public class BirdhouseBlockEntity extends BlockEntity {
 
     // The block is active if it able to consume seeds
     private Boolean isActive = false;
-    private AABB birdHouseBB =
-        new AABB(this.getBlockPos().getX() - 10,
+    private AABB birdHouseBB = new AABB(
+        this.getBlockPos().getX() - 10,
         this.getBlockPos().getY(),
         this.getBlockPos().getZ() - 10,
         this.getBlockPos().getX() + 10,
         this.getBlockPos().getY() + 10,
-        this.getBlockPos().getZ() + 10);
-
+        this.getBlockPos().getZ() + 10
+        );
     /**
      * @param pos   Position of the block.
      * @param state State of the block being created.
@@ -84,7 +84,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
 
     /**
      * This is the main loop for the birdhouse.
-     * It ticks all the events that should be happening 
+     * It ticks all the events that should be happening
      * after a certain interval.
      */
 
@@ -127,7 +127,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
 
     private void handleParrotGoalForTick() {
         if (tickerForBirdhouseGoalModification.tick()) {
-            if(this.isActive) {
+            if (this.isActive) {
                 applyBirdHouseGoalToSurroundingParrots();
             } else {
                 removeBirdHouseGoalToSurroundingParrots();
@@ -136,35 +136,41 @@ public class BirdhouseBlockEntity extends BlockEntity {
     }
 
     /**
-     * Applies the "HangingAroundBirdhouseGoal" to birds in the 
+     * Applies the "HangingAroundBirdhouseGoal" to birds in the
      * birdhouse bounding box.
+     *
+     * TODO: Make this threadsafe.
      */
     private void applyBirdHouseGoalToSurroundingParrots() {
         List<Parrot> parrots = this.level.getEntitiesOfClass(Parrot.class, this.birdHouseBB);
-        for(Parrot temp:parrots) {
+        for (Parrot temp:parrots) {
             // Check to see if they already have the goal applied. If not, apply it.
-            if(!temp.goalSelector.getAvailableGoals().stream().anyMatch(wg -> wg.getGoal() instanceof HangAroundBirdhouseGoal)) {
+            if (!temp.goalSelector.getAvailableGoals().stream()
+                .anyMatch(wg -> wg.getGoal() instanceof HangAroundBirdhouseGoal)) {
                 temp.goalSelector.addGoal(0, new HangAroundBirdhouseGoal(temp, 1.0, 60, false, this.getBlockPos()));
             }
         }
     }
 
     /**
-     * Removes the "HangingAroundBirdhouseGoal" to birds in the 
+     * Removes the "HangingAroundBirdhouseGoal" to birds in the
      * birdhouse bounding box.
+     *
+     * TODO: Make this threadsafe.
      */
     private void removeBirdHouseGoalToSurroundingParrots() {
         List<Parrot> parrots = this.level.getEntitiesOfClass(Parrot.class, this.birdHouseBB);
-        for(Parrot temp:parrots) {
+        for (Parrot temp:parrots) {
             // Check to see if they already have the goal applied. If not, apply it.
-            if(temp.goalSelector.getAvailableGoals().stream().anyMatch(wg -> wg.getGoal() instanceof HangAroundBirdhouseGoal)) {
+            if (temp.goalSelector.getAvailableGoals().stream()
+                .anyMatch(wg -> wg.getGoal() instanceof HangAroundBirdhouseGoal)) {
                 Goal toRemove = null;
-                for(WrappedGoal g : temp.goalSelector.getAvailableGoals()) {
-                    if(g.getGoal() instanceof HangAroundBirdhouseGoal) {
+                for (WrappedGoal g : temp.goalSelector.getAvailableGoals()) {
+                    if (g.getGoal() instanceof HangAroundBirdhouseGoal) {
                         toRemove = g.getGoal();
                     }
                 }
-                if(toRemove != null) {
+                if (toRemove != null) {
                     temp.goalSelector.removeGoal(toRemove);
                 }
             }
@@ -172,18 +178,18 @@ public class BirdhouseBlockEntity extends BlockEntity {
     }
 
     private void handleSeedsForTick() {
+        // Tick the birdhouse to check it needs to consume a seed
         if (tickerForSeedConsumption.tick()) {
+            // If a seed was successfully extracted from the birdhouse
             if (!itemHandler.extractItem(0, 1, false).isEmpty()) {
-                // If the birdhouse is active, try consuming a seed
+                // Check if the state of the BHouse is not active
                 if (!this.isActive) {
-                    // If a seed was successfully consumed, set birdhouse to inactive
+                    // If not active, set to active
                     this.isActive = true;
                 }
-            } else {
-                // If birdhouse is inactive, start ticking to eventually reactivate it
-                
+            } else { // If nothing was extracted from the BHouse (inventory was empty)
+                // Set BHouse state to false
                 this.isActive = false;
-                
             }
         }
 

@@ -8,8 +8,6 @@ import net.minecraft.world.phys.Vec3;
 
 public class HangAroundBirdhouseGoal extends RandomStrollGoal {
 
-    private final boolean checkNoActionTime;
-    private BlockPos bHousePos;
     private Vec3 bHousePosVec;
 
     /**
@@ -24,9 +22,7 @@ public class HangAroundBirdhouseGoal extends RandomStrollGoal {
     public HangAroundBirdhouseGoal(PathfinderMob pMob, double pSpeedModifier,
         int pInterval, boolean pCheckNoActionTime, BlockPos bHousePos) {
         super(pMob, pSpeedModifier, pInterval, pCheckNoActionTime);
-        this.checkNoActionTime = pCheckNoActionTime;
-        this.bHousePos = bHousePos;
-        this.bHousePosVec = new Vec3(this.bHousePos.getX(), this.bHousePos.getY(), this.bHousePos.getZ());
+        this.bHousePosVec = new Vec3(bHousePos.getX(), bHousePos.getY(), bHousePos.getZ());
     }
 
     /**
@@ -36,7 +32,7 @@ public class HangAroundBirdhouseGoal extends RandomStrollGoal {
      */
     @Override
        protected Vec3 getPosition() {
-        if (this.bHousePos != null) {
+        if (this.bHousePosVec != null) {
             return this.bHousePosVec;
         } else {
             return super.getPosition();
