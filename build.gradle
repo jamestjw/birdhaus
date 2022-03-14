@@ -4,11 +4,13 @@ buildscript {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://maven.parchmentmc.org' }
+        maven { url = 'https://plugins.gradle.org/m2/' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
+        classpath 'com.adarshr:gradle-test-logger-plugin:3.2.0'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -18,6 +20,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'java'
 apply plugin: 'checkstyle'
+apply plugin: 'com.adarshr.test-logger'
 
 version = '1.18-0.1.1'
 group = 'com.ocelotslovebirds.birdhaus' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
