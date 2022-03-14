@@ -100,7 +100,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
     public void tickServer() {
         handleSeedsForTick();
         handleBirdSpawnForTick();
-        handleParrotGoalForTick();
+        //handleParrotGoalForTick();
     }
 
     /*
