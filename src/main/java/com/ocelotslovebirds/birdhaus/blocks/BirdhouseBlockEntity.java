@@ -1,16 +1,12 @@
 package com.ocelotslovebirds.birdhaus.blocks;
 
-
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.ocelotslovebirds.birdhaus.setup.Registration;
 import com.ocelotslovebirds.birdhaus.ticker.FixedIntervalTicker;
-import com.ocelotslovebirds.birdhaus.ticker.Ticker;
-import com.ocelotslovebirds.birdhaus.setup.Registration;
 import com.ocelotslovebirds.birdhaus.mobai.HangAroundBirdhouseGoal;
-import com.ocelotslovebirds.birdhaus.setup.Registration;
-
+import com.ocelotslovebirds.birdhaus.ticker.Ticker;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -56,8 +52,6 @@ public class BirdhouseBlockEntity extends BlockEntity {
         this.getBlockPos().getY() + 10,
         this.getBlockPos().getZ() + 10);
 
-
-
     /**
      * @param pos   Position of the block.
      * @param state State of the block being created.
@@ -88,19 +82,16 @@ public class BirdhouseBlockEntity extends BlockEntity {
         super.load(tag);
     }
 
-
     /**
-     * This is the main loop for the birdhouse. It needs to be improved to allow for the spawning of birds however at
-     * the moment it works well for
-     * 1. Extracting seeds from the inventory stack,
-     * 2. Reacting to seeds being placed in the stack.
-     * 3. Creates a ticker that can be used to time bird spawns eventually.
+     * This is the main loop for the birdhouse.
+     * It ticks all the events that should be happening 
+     * after a certain interval.
      */
 
     public void tickServer() {
         handleSeedsForTick();
         handleBirdSpawnForTick();
-        //handleParrotGoalForTick();
+        handleParrotGoalForTick();
     }
 
     /*
@@ -144,6 +135,10 @@ public class BirdhouseBlockEntity extends BlockEntity {
         }
     }
 
+    /**
+     * Applies the "HangingAroundBirdhouseGoal" to birds in the 
+     * birdhouse bounding box.
+     */
     private void applyBirdHouseGoalToSurroundingParrots() {
         List<Parrot> parrots = this.level.getEntitiesOfClass(Parrot.class, this.birdHouseBB);
         for(Parrot temp:parrots) {
@@ -154,6 +149,10 @@ public class BirdhouseBlockEntity extends BlockEntity {
         }
     }
 
+    /**
+     * Removes the "HangingAroundBirdhouseGoal" to birds in the 
+     * birdhouse bounding box.
+     */
     private void removeBirdHouseGoalToSurroundingParrots() {
         List<Parrot> parrots = this.level.getEntitiesOfClass(Parrot.class, this.birdHouseBB);
         for(Parrot temp:parrots) {
@@ -173,16 +172,18 @@ public class BirdhouseBlockEntity extends BlockEntity {
     }
 
     private void handleSeedsForTick() {
-        if (this.isActive) {
-            // If the birdhouse is active, try consuming a seed
+        if (tickerForSeedConsumption.tick()) {
             if (!itemHandler.extractItem(0, 1, false).isEmpty()) {
-                // If a seed was successfully consumed, set birdhouse to inactive
+                // If the birdhouse is active, try consuming a seed
+                if (!this.isActive) {
+                    // If a seed was successfully consumed, set birdhouse to inactive
+                    this.isActive = true;
+                }
+            } else {
+                // If birdhouse is inactive, start ticking to eventually reactivate it
+                
                 this.isActive = false;
-            }
-        } else {
-            // If birdhouse is inactive, start ticking to eventually reactivate it
-            if (tickerForSeedConsumption.tick()) {
-                this.isActive = true;
+                
             }
         }
 
