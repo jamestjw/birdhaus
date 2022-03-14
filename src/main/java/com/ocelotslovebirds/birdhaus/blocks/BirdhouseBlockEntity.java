@@ -1,10 +1,17 @@
 package com.ocelotslovebirds.birdhaus.blocks;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import com.ocelotslovebirds.birdhaus.setup.Registration;
+import com.ocelotslovebirds.birdhaus.ticker.FixedIntervalTicker;
+import com.ocelotslovebirds.birdhaus.ticker.Ticker;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -26,7 +33,11 @@ public class BirdhouseBlockEntity extends BlockEntity {
     private final ItemStackHandler itemHandler = createHandler();
     private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
 
-    private int counter;
+    private Ticker tickerForBirdSpawns = new FixedIntervalTicker(150);
+    private Ticker tickerForSeedConsumption = new FixedIntervalTicker(100);
+
+    // The block is active if it able to consume seeds
+    private Boolean isActive = false;
 
     /**
      * @param pos   Position of the block.
@@ -59,8 +70,6 @@ public class BirdhouseBlockEntity extends BlockEntity {
     }
 
 
-    // TODO: Hook in bird spawning into the Entity ticker.
-
     /**
      * This is the main loop for the birdhouse. It needs to be improved to allow for the spawning of birds however at
      * the moment it works well for
@@ -70,22 +79,62 @@ public class BirdhouseBlockEntity extends BlockEntity {
      */
 
     public void tickServer() {
-        if (counter > 0) {
-            counter--;
-            setChanged();
+        handleSeedsForTick();
+        handleBirdSpawnForTick();
+    }
+
+    /*
+     * @param xOffset  x offset (East-West axis) at which to spawn the bird
+     * @param yOffset  y offset (Up-Down axis) at which to spawn the bird
+     * @param yOffset  z offset (North-South axis) at which to spawn the bird
+     * All offsets are relative to the birdhouse
+    */
+    private void spawnNewBird(int xOffset, int yOffset, int zOffset) {
+        // Dirty type casting because it works
+        ServerLevel lvl = (ServerLevel) this.getLevel();
+        Parrot newBird = new Parrot(EntityType.PARROT, lvl);
+        lvl.addFreshEntity(newBird);
+        BlockPos desBlockPos = this.getBlockPos().offset(xOffset, yOffset, zOffset);
+
+        // Move the spawned bird to the destination
+        // 0.0 because it works, not sure what this supposed to be
+        newBird.moveTo(desBlockPos, (float) 0.0, (float) 0.0);
+    }
+
+    private void handleBirdSpawnForTick() {
+        if (tickerForBirdSpawns.tick()) {
+            // Random x offset
+            int xOffset = ThreadLocalRandom.current().nextInt(-20, 20);
+            // Spawn bird 10 units higher than the birdhouse
+            int yOffset = this.getBlockPos().getY() + 10;
+            // Random z offset
+            int zOffset = ThreadLocalRandom.current().nextInt(-20, 20);
+            spawnNewBird(xOffset, yOffset, zOffset);
         }
-        if (counter <= 0) {
+    }
+
+    private void handleSeedsForTick() {
+        if (isActive) {
+            // If the birdhouse is active, try consuming a seed
             if (!itemHandler.extractItem(0, 1, false).isEmpty()) {
-                counter = 100;
-                setChanged();
+                // If a seed was successfully consumed, set birdhouse to inactive
+                isActive = false;
+            }
+        } else {
+            // If birdhouse is inactive, start ticking to eventually reactivate it
+            if (tickerForSeedConsumption.tick()) {
+                isActive = true;
             }
         }
 
-        // When adding seeds, if the seeds are "burnable" then set the block to active.
+        // Update the block state if there was a change
         BlockState blockState = getBlockState();
-        if (blockState.getValue(BlockStateProperties.CONDITIONAL) != counter > 0) {
-            level.setBlock(worldPosition, blockState.setValue(BlockStateProperties.CONDITIONAL, counter > 0),
-                    Block.UPDATE_ALL);
+        if (blockState.getValue(BlockStateProperties.CONDITIONAL) != isActive) {
+            level.setBlock(
+                worldPosition,
+                blockState.setValue(BlockStateProperties.CONDITIONAL, isActive),
+                Block.UPDATE_ALL
+            );
         }
     }
 
