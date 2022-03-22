@@ -186,19 +186,15 @@ public class BirdhouseBlockEntity extends BlockEntity {
         if (tickerForSeedConsumption.tick()) {
             ItemStack seeds = itemHandler.extractItem(0, 1, false);
 
-            if (seeds.is(Tags.Items.SEEDS_WHEAT)){
+            if (seeds.is(Tags.Items.SEEDS_WHEAT)) {
                 birdColor = 3;
-            }
-            else if (seeds.is(Tags.Items.SEEDS_BEETROOT)){
+            } else if (seeds.is(Tags.Items.SEEDS_BEETROOT)) {
                 birdColor = 1;
-            }
-            else if (seeds.is(Tags.Items.SEEDS_MELON)){
+            } else if (seeds.is(Tags.Items.SEEDS_MELON)) {
                 birdColor = 2;
-            }
-            else if (seeds.is(Tags.Items.SEEDS_PUMPKIN)){
+            } else if (seeds.is(Tags.Items.SEEDS_PUMPKIN)) {
                 birdColor = 4;
-            }
-            else {
+            } else {
                 birdColor = 0;
             }
             // If a seed was successfully extracted from the birdhouse
