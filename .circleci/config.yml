@@ -80,10 +80,87 @@ jobs:
 
       # Send notification to discord about the status of the workflow.
       - discord/status
+  build:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: gradle dependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+
+      # Build JAR file
+      - run: gradle build
+
+      - run:
+          name: "Move JAR to ./artifacts"
+          command: |
+            mkdir -p artifacts
+            cp ./build/libs/*.jar ./artifacts/
+
+      - run:
+          name: "Save tag number for deployment phase"
+          command: |
+            TAG_STR=$(git describe --all $(git rev-parse HEAD))
+            TAG=$(echo $TAG_STR | perl -ne 'print "$1" if /tags\/(v\d+.\d+.\d+)/')
+            echo -n $TAG > ./artifacts/tag.txt
+
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - artifacts
+  publish-github-release:
+    docker:
+      - image: cibuilds/github:0.10
+    working_directory: ~/repo
+    steps:
+      - attach_workspace:
+          at: ~/repo    
+      - run:
+          name: "Upload JAR to Github release"
+          command: |
+            if [ -s artifacts/tag.txt ]; then
+              TAG=$(cat artifacts/tag.txt)
+              ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -replace ${TAG} ./artifacts/*.jar;
+            fi
 
 workflows:
   version: 2.1
-  build:
+  checks:
     jobs:
       - run-test-suite
       - static-code-analysis
+  build_and_deploy:  
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /^v\d+\.\d+\.\d+$/  
+            branches:
+              ignore: /.*/              
+      - publish-github-release:
+          requires: 
+            - build           
+          filters:
+            tags:
+              only: /^v\d+\.\d+\.\d+$/    
+            branches:
+              ignore: /.*/
+            
