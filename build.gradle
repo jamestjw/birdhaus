@@ -23,8 +23,6 @@ apply plugin: 'java'
 apply plugin: 'checkstyle'
 apply plugin: 'com.adarshr.test-logger'
 
-
-
 version = '1.18-0.1.1'
 group = 'com.ocelotslovebirds.birdhaus' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'birdhaus'
@@ -148,24 +146,15 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     mavenCentral()
-
-    // Put repositories for dependencies here
-    // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
 }
 
 dependencies {
-    implementation 'junit:junit:4.13.2'
-    implementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
 
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.18.2-40.0.1'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.0.32'
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
