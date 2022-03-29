@@ -117,7 +117,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
     }
 
     private void handleBirdSpawnForTick() {
-        if (tickerForBirdSpawns.tick()) {
+        if (tickerForBirdSpawns.tick() && this.isActive) {
             // Random x offset
             int xOffset = ThreadLocalRandom.current().nextInt(-20, 20);
             // Spawn bird 10 units higher than the birdhouse
