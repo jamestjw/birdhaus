@@ -187,18 +187,18 @@ public class BirdhouseBlockEntity extends BlockEntity {
             ItemStack seeds = itemHandler.extractItem(0, 1, false);
 
             if (seeds.is(Tags.Items.SEEDS_WHEAT)) {
-                birdColor = 3;
+                birdColor = 3; //cyan
             } else if (seeds.is(Tags.Items.SEEDS_BEETROOT)) {
-                birdColor = 1;
+                birdColor = 1; //blue
             } else if (seeds.is(Tags.Items.SEEDS_MELON)) {
-                birdColor = 2;
+                birdColor = 2; //green
             } else if (seeds.is(Tags.Items.SEEDS_PUMPKIN)) {
-                birdColor = 4;
+                birdColor = 4; //grey
             } else {
-                birdColor = 0;
+                birdColor = 0; //red
             }
             // If a seed was successfully extracted from the birdhouse
-            if (seeds.isEmpty()) {
+            if (!seeds.isEmpty()) {
                 // Check if the state of the BHouse is not active
                 if (!this.isActive) {
                     // If not active, set to active
