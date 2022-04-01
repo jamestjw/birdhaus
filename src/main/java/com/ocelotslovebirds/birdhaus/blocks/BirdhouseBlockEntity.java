@@ -42,6 +42,9 @@ public class BirdhouseBlockEntity extends BlockEntity {
     private Ticker tickerForSeedConsumption = new FixedIntervalTicker(100);
     private Ticker tickerForBirdhouseGoalModification = new FixedIntervalTicker(100);
 
+    // variable to store which color the spawned birds will be
+    private int birdColor = 0;
+
     // The block is active if it able to consume seeds
     private Boolean isActive = false;
     private AABB birdHouseBB = new AABB(
@@ -104,6 +107,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
         // Dirty type casting because it works
         ServerLevel lvl = (ServerLevel) this.getLevel();
         Parrot newBird = new Parrot(EntityType.PARROT, lvl);
+        newBird.setVariant(birdColor);
         lvl.addFreshEntity(newBird);
         BlockPos desBlockPos = this.getBlockPos().offset(xOffset, yOffset, zOffset);
 
@@ -180,8 +184,21 @@ public class BirdhouseBlockEntity extends BlockEntity {
     private void handleSeedsForTick() {
         // Tick the birdhouse to check it needs to consume a seed
         if (tickerForSeedConsumption.tick()) {
+            ItemStack seeds = itemHandler.extractItem(0, 1, false);
+
+            if (seeds.is(Tags.Items.SEEDS_WHEAT)) {
+                birdColor = 3; //cyan
+            } else if (seeds.is(Tags.Items.SEEDS_BEETROOT)) {
+                birdColor = 1; //blue
+            } else if (seeds.is(Tags.Items.SEEDS_MELON)) {
+                birdColor = 2; //green
+            } else if (seeds.is(Tags.Items.SEEDS_PUMPKIN)) {
+                birdColor = 4; //grey
+            } else {
+                birdColor = 0; //red
+            }
             // If a seed was successfully extracted from the birdhouse
-            if (!itemHandler.extractItem(0, 1, false).isEmpty()) {
+            if (!seeds.isEmpty()) {
                 // Check if the state of the BHouse is not active
                 if (!this.isActive) {
                     // If not active, set to active
