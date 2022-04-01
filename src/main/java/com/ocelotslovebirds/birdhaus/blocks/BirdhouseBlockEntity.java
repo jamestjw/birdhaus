@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -136,6 +137,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
             } else {
                 removeBirdHouseGoalToSurroundingParrots();
             }
+
         }
     }
 
@@ -194,7 +196,9 @@ public class BirdhouseBlockEntity extends BlockEntity {
                 birdColor = 2; //green
             } else if (seeds.is(Tags.Items.SEEDS_PUMPKIN)) {
                 birdColor = 4; //grey
-            } else {
+            } else if (seeds.is(Tags.Items.MUSHROOMS)) {
+                toPartyMode();
+            }else {
                 birdColor = 0; //red
             }
             // If a seed was successfully extracted from the birdhouse
@@ -219,6 +223,43 @@ public class BirdhouseBlockEntity extends BlockEntity {
                 Block.UPDATE_ALL
             );
         }
+    }
+
+    public Parrot aiStepParty(){
+        ServerLevel lvl = (ServerLevel) this.getLevel();
+        return new Parrot(EntityType.PARROT, lvl) {
+
+            boolean partyParrot;
+            BlockPos jukebox;
+
+            @Override
+            public void aiStep() {
+                if (this.jukebox == null || !this.jukebox.closerThan(this.position(), 3.46D)) {
+                    this.partyParrot = false;
+                    this.jukebox = null;
+                }
+
+                if (this.level.random.nextInt(400) == 0) {
+                    imitateNearbyMobs(this.level, this);
+                }
+
+                super.aiStep();
+            }
+        };
+    }
+
+    private void toPartyMode(){
+        List<Parrot> parrots = this.level.getEntitiesOfClass(Parrot.class, this.birdHouseBB);
+        if (this.isActive){
+            for (Parrot temp:parrots) {
+                temp.setRecordPlayingNearby(this.getBlockPos(), true);
+            }
+        } else {
+            for (Parrot temp:parrots){
+                temp.setRecordPlayingNearby(this.getBlockPos(),false);
+            }
+        }
+
     }
 
     /**
@@ -251,7 +292,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
              */
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
-                return stack.getItem().getTags().contains(Tags.Items.SEEDS.getName());
+                return stack.getItem().getTags().contains(Tags.Items.SEEDS.getName()) || stack.getItem().getTags().contains(Tags.Items.MUSHROOMS.getName()) ;
             }
 
             /**
@@ -283,4 +324,6 @@ public class BirdhouseBlockEntity extends BlockEntity {
         return super.getCapability(cap, side);
     }
 }
+
+
 
