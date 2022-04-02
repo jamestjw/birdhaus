@@ -33,7 +33,6 @@ public class BlockStatesGen extends BlockStateProvider {
     private void registerBirdhouseStub() {
 
         createFrameBirdhouseStub("wood_light", "block/stripped_oak_log", "wood_dark", "block/stripped_dark_oak_log");
-
     }
 
     /**
@@ -79,8 +78,7 @@ public class BlockStatesGen extends BlockStateProvider {
         floatingCube(frame, 12f, 11f, 4f, 14f, 12f, 12f, "#" + darkTextureName); //roof shingles 10
         floatingCube(frame, 13f, 10f, 4f, 15f, 11f, 12f, "#" + darkTextureName); //roof shingles 11
 
-        //frame.texture("particle", modLoc("block/birdhouse"));
-
+        frame.texture("particle", modLoc(lightTexturePath));
         createComplexBirdhouseStubModel(Registration.BIRDHOUSE_BLOCK.get(), frame);
     }
 
@@ -120,6 +118,7 @@ public class BlockStatesGen extends BlockStateProvider {
             bld.part().modelFile(models[i]).rotationY(270).rotationX(90).addModel()
                     .condition(BlockStateProperties.CONDITIONAL, conditional);
         }
+
     }
 
     /**

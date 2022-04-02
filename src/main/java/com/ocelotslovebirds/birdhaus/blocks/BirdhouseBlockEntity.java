@@ -251,7 +251,7 @@ public class BirdhouseBlockEntity extends BlockEntity {
              */
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
-                return stack.getItem().getTags().contains(Tags.Items.SEEDS.getName());
+                return stack.is(Tags.Items.SEEDS);
             }
 
             /**
