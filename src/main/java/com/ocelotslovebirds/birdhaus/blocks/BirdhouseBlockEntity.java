@@ -184,6 +184,8 @@ public class BirdhouseBlockEntity extends BlockEntity {
     private void handleSeedsForTick() {
         // Tick the birdhouse to check it needs to consume a seed
         if (tickerForSeedConsumption.tick()) {
+            // If a seed was successfully extracted from the birdhouse
+            if (!itemHandler.extractItem(0, 1, false).isEmpty()) {
             ItemStack seeds = itemHandler.extractItem(0, 1, false);
 
             if (seeds.is(Tags.Items.SEEDS_WHEAT)) {
