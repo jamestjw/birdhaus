@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.ocelotslovebirds.birdhaus.Core;
 import com.ocelotslovebirds.birdhaus.blocks.BirdhouseContainer;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -46,7 +45,8 @@ public class BirdhouseGui extends AbstractContainerScreen<BirdhouseContainer> {
      */
     @Override
     protected void renderLabels(PoseStack pPoseStack, int mouseX, int mouseY) {
-        drawString(pPoseStack, Minecraft.getInstance().font, "Birdhouse", 10, 10, 0xFFFFFF);
+        this.font.draw(pPoseStack, "Birdhouse", 66, 10, 0x404040);
+        this.font.draw(pPoseStack, "Inventory", 10, 57, 0x404040);
     }
 
     /**
