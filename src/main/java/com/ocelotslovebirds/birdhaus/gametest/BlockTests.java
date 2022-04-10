@@ -12,7 +12,7 @@ import net.minecraftforge.gametest.PrefixGameTestTemplate;
 @PrefixGameTestTemplate(false)
 @GameTestHolder(Core.MODID)
 public class BlockTests {
-    @GameTest(template = "empty")
+    @GameTest(template = "empty3x3x3")
     public static void sampleTest(GameTestHelper test) {
         BlockPos birdBlock = new BlockPos(1, 1, 1);
 

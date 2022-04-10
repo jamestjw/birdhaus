@@ -16,7 +16,7 @@ public class BasicTests {
      * the rest of the tests can be assumed to fail.
      * @param helper The gameTest helper will be automatically passed by the runGameTestServer.
      */
-    @GameTest(template = "empty")
+    @GameTest(template = "empty3x3x3")
     public static void templateTest(final GameTestHelper helper) {
         helper.succeed();
     }

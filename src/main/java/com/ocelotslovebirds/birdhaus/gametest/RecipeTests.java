@@ -12,7 +12,7 @@ import net.minecraftforge.gametest.PrefixGameTestTemplate;
 @PrefixGameTestTemplate(false)
 @GameTestHolder(Core.MODID)
 public class RecipeTests {
-    @GameTest(template = "empty")
+    @GameTest(template = "empty3x3x3")
     public static void recipeExists(final GameTestHelper test) {
         ResourceLocation recipeLoc = new ResourceLocation("birdhaus", "birdhouse");
 
