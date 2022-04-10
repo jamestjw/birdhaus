@@ -152,6 +152,18 @@ public class BirdhouseBlockEntity extends BlockEntity {
             if (!temp.goalSelector.getAvailableGoals().stream()
                 .anyMatch(wg -> wg.getGoal() instanceof HangAroundBirdhouseGoal)) {
                 temp.goalSelector.addGoal(0, new HangAroundBirdhouseGoal(temp, 1.0, 60, false, this.getBlockPos()));
+            } else { // The bird already has the goal applied
+                Goal toUpdate = null;
+                for (WrappedGoal g : temp.goalSelector.getAvailableGoals()) {
+                    if (g.getGoal() instanceof HangAroundBirdhouseGoal) {
+                        toUpdate = g.getGoal();
+                        HangAroundBirdhouseGoal toUpdateHabhg = (HangAroundBirdhouseGoal) toUpdate;
+                        // Check to see if the bhouse location in the goal is null
+                        if (toUpdateHabhg.getBhouseBlockPos() == null) {
+                            toUpdateHabhg.setBhouseLoc(this.getBlockPos());
+                        }
+                    }
+                }
             }
         }
     }
@@ -165,7 +177,6 @@ public class BirdhouseBlockEntity extends BlockEntity {
     private void removeBirdHouseGoalToSurroundingParrots() {
         List<Parrot> parrots = this.level.getEntitiesOfClass(Parrot.class, this.birdHouseBB);
         for (Parrot temp:parrots) {
-            // Check to see if they already have the goal applied. If not, apply it.
             if (temp.goalSelector.getAvailableGoals().stream()
                 .anyMatch(wg -> wg.getGoal() instanceof HangAroundBirdhouseGoal)) {
                 Goal toRemove = null;
@@ -175,7 +186,11 @@ public class BirdhouseBlockEntity extends BlockEntity {
                     }
                 }
                 if (toRemove != null) {
-                    temp.goalSelector.removeGoal(toRemove);
+                    HangAroundBirdhouseGoal toRemoveHabhg = (HangAroundBirdhouseGoal) toRemove;
+                    // A birdhouse should only remove a goal it applied
+                    if (toRemoveHabhg.getBhouseBlockPos() == this.getBlockPos()) {
+                        temp.goalSelector.removeGoal(toRemove);
+                    }
                 }
             }
         }
