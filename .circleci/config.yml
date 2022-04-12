@@ -106,8 +106,13 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      # Build JAR file
-      - run: gradle build
+      - run:
+          name: "Generate resources"
+          command: gradle runData || true
+
+      - run:
+          name: "Build JAR"
+          command: gradle build
 
       - run:
           name: "Move JAR to ./artifacts"
