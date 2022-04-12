@@ -23,7 +23,7 @@ apply plugin: 'java'
 apply plugin: 'checkstyle'
 apply plugin: 'com.adarshr.test-logger'
 
-version = '1.18-1.1.0'
+version = '1.18-1.1.1'
 group = 'com.ocelotslovebirds.birdhaus' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'birdhaus'
 
