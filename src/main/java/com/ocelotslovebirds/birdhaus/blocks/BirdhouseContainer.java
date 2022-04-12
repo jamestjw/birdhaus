@@ -34,7 +34,7 @@ public class BirdhouseContainer extends AbstractContainerMenu {
         this.playerInventory = new InvWrapper(playerInventory);
         if (blockEntity != null) {
             blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> addSlot(
-                    new SlotItemHandler(h, 0, 64, 24)));
+                    new SlotItemHandler(h, 0, 82, 24)));
         }
         layoutPlayerInventorySlots(10, 70);
     }
