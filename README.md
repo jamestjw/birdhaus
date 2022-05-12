@@ -1,6 +1,8 @@
 # Birdhaus
 A Minecraft mod that brings you the wonder of birds!
 
+https://www.curseforge.com/minecraft/mc-mods/birdhaus
+
 ## How to install?
 We make use `gradle` (a build-automation tool). Installation steps may be found [here](https://docs.gradle.org/current/userguide/installation.html).
 
