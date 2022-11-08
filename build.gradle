@@ -113,10 +113,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', ''
+            property 'forge.enabledGameTestNamespaces', 'birdhaus'
 
             mods {
-                examplemod {
+                birdhaus {
                     source sourceSets.main
                 }
             }
